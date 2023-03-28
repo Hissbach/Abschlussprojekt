@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 import json
+import re
 
 
 FILE_PATH = '/Users/olehissbach/Desktop/Abschlussprojekt/Data/Mappe1.xlsx'
@@ -41,7 +42,7 @@ def read_excel_to_list(file_path, sheet_name):
 
 def search_keywords_in_folder(folder_path, default_keywords, value_list):
     """
-    Searches through all the txt files in a folder for keywords.
+    Searches through all the txt files in a folder for keywords using regex.
 
     Parameters:
         - folder_path (str): the path to the folder containing the txt files
@@ -67,11 +68,11 @@ def search_keywords_in_folder(folder_path, default_keywords, value_list):
         if file_name.endswith('.txt'):
             file_path = os.path.join(folder_path, file_name)
 
-            # Read the file and search for the keywords using a context manager
+            # Read the file and search for the keywords using regex
             try:
                 with open(file_path, 'r', encoding='utf-8') as f:
                     contents = f.read().lower()
-                    file_keywords = [keyword.lower() for keyword in all_keywords if keyword.lower() in contents]
+                    file_keywords = [keyword.lower() for keyword in all_keywords if re.search(r'\b{}\b'.format(keyword.lower()), contents)]
             except UnicodeDecodeError:
                 error_files.append(file_name)
                 continue
