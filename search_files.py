@@ -17,7 +17,7 @@ def search_keywords_in_folder(folder_path: str, default_keywords: List[str], val
         - dict: a dictionary where the keys are the file names and the values are lists of the keywords found in each file
     """
     # Combine the default keywords and value_list
-    all_keywords = set(default_keywords + value_list)
+    all_keywords = default_keywords + value_list
 
     results = {}
     error_files = []
