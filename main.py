@@ -1,6 +1,6 @@
-from input_validation import validate_file_path, validate_folder_path
-import excel_import
-import search_files
+from input_validation.input_validation import validate_file_path, validate_folder_path
+import excel_import.excel_import as excel_import
+import search_files.search_files as search_files
 
 FILE_PATH = '/Users/olehissbach/Desktop/Abschlussprojekt/Data/Mappe1.xlsx'
 SHEET_NAME = 'Datatabelle'
