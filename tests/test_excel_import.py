@@ -31,3 +31,8 @@ class TestReadExcelToList(unittest.TestCase):
         mock_read_excel.return_value = mock_data
         result = read_excel_to_list('file.xlsx', 'Sheet1')
         self.assertEqual(result, [1, 3, 2, 4])
+    @patch('pandas.read_excel')
+    def test_read_excel_nonexistent_sheet(self, mock_read_excel):
+        mock_read_excel.side_effect = ValueError("No sheet named 'NonexistentSheet'")
+        result = read_excel_to_list('file.xlsx', 'NonexistentSheet')
+        self.assertEqual(result, [])
