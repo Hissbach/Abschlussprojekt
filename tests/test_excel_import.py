@@ -1,7 +1,8 @@
 import unittest
 import pandas as pd
 from unittest.mock import patch
-from ..excel_import.excel_import import read_excel_to_list
+from excel_import import read_excel_to_list
+
 class TestReadExcelToList(unittest.TestCase):
     @patch('pandas.read_excel')
     def test_read_excel_file_not_found(self, mock_read_excel):
