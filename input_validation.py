@@ -2,13 +2,13 @@ import os
 
 def validate_file_path(file_path):
     """
-    Validates if the given file path exists.
+    Validiert das der Filepath korrekt ist
 
     Parameters:
-        - file_path (str): the path to the file to validate
+        - file_path (str): der Pfad zur Datei
 
     Returns:
-        - bool: True if the file exists, False otherwise
+        - bool: True wenn Datei existiert, False wenn nicht
     """
     if not os.path.isfile(file_path):
         print(f"The file '{file_path}' does not exist.")
@@ -18,13 +18,13 @@ def validate_file_path(file_path):
 
 def validate_folder_path(folder_path):
     """
-    Validates if the given folder path exists.
+    Validiert ob ein Dateiordner existiert
 
     Parameters:
-        - folder_path (str): the path to the folder to validate
+        - folder_path (str): Der Pfad zum Ordner
 
     Returns:
-        - bool: True if the folder exists, False otherwise
+        - bool: True wenn Ordner existiert; sonst False
     """
     if not os.path.isdir(folder_path):
         print(f"The folder '{folder_path}' does not exist.")

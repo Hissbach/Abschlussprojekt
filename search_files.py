@@ -6,33 +6,28 @@ from typing import List, Dict
 
 def search_keywords_in_folder(folder_path: str, default_keywords: List[str], value_list: List[str]) -> Dict[str, List[str]]:
     """
-    Searches through all the txt files in a folder for keywords using regex.
+    Sucht durch alle .txt Datein in einem Ordner nach Schlüsselworten mit regex
 
     Parameters:
-        - folder_path (str): the path to the folder containing the txt files
-        - default_keywords (list): a list of strings representing the default keywords to search for
-        - value_list (list): a list of strings representing additional keywords to search for
+        - folder_path (str): Pfad zum Ordner mit den txt Datein
+        - default_keywords (list): Liste an Standard Schlüsselworten die bei jedem Programmdurchlauf abgefragt werden sollen
+        - value_list (list): Liste an Schlüsselworten die zusätzlich noch abgefragt werden sollen (aus der Excel Liste)
 
     Returns:
-        - dict: a dictionary where the keys are the file names and the values are lists of the keywords found in each file
+        - dict: Ein Dictionary wo die Dateinamen Keys sind mit einer Liste aus gefunden schlüsselworten als Value für jede Datei
     """
-    # Combine the default keywords and value_list
+    # Kombiniert default_ und excel_Keywords
     all_keywords = default_keywords + value_list
 
     results = {}
     error_files = []
 
-    # Check if folder_path is valid
-    if not os.path.isdir(folder_path):
-        print(f"The folder '{folder_path}' does not exist.")
-        return results
-
-    # Loop through each file in the folder
+    # Loopt durch alle Datein im Zielordner
     for file_name in os.listdir(folder_path):
         if file_name.endswith('.txt'):
             file_path = os.path.join(folder_path, file_name)
 
-            # Read the file and search for the keywords using regex
+            # Ließt die Datei und sucht nach Keywords mit Regex
             try:
                 with open(file_path, 'r', encoding='utf-8') as f:
                     contents = f.read().lower()
@@ -41,15 +36,15 @@ def search_keywords_in_folder(folder_path: str, default_keywords: List[str], val
                 error_files.append(file_name)
                 continue
 
-            # Add the results to the dictionary
+            # Übergibt Ergebnis ins Dictionary
             if file_keywords:
                 results[file_name] = file_keywords
 
-    # Export the results to a json file
+    # Exportiert Ergebnis in einer JSON-Datei
     with open('results.json', 'w') as f:
         json.dump(results, f, indent=4)
 
-    # Print the error files, if any
+    # Gibt Error-Files aus welche nicht gelesen werden konnten
     if error_files:
         print("The following files could not be decoded:")
         for error_file in error_files:

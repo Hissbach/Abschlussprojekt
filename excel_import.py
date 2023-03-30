@@ -3,14 +3,14 @@ import pandas as pd
 
 def read_excel_to_list(file_path: str, sheet_name: str) -> list:
     """
-    Reads values from an Excel sheet and returns them as a list of strings.
+    Liest Werte aus einer Excel-Datei und gibt sie als Liste an Strings aus
 
     Parameters:
-        - file_path (str): the path to the Excel file
-        - sheet_name (str): the name of the sheet to read
+        - file_path (str): Pfad zur Excel-Datei
+        - sheet_name (str): Name der Tabelle (muss vllt noch rausgenommen werden könnte Probleme bereiten)
 
     Returns:
-        - list: a list of strings representing the values in the sheet
+        - list: Eine Liste an Strings, mit den Werten aus der Excel Datei
     """
     try:
         # Load the Excel sheet into a pandas DataFrame
