@@ -42,7 +42,10 @@ def search_keywords_in_folder(folder_path: str, default_keywords: List[str], val
 
     # Exportiert Ergebnis in einer JSON-Datei
     with open('results.json', 'w') as f:
-        json.dump(results, f, indent=4)
+        json.dump({
+            "results": results,
+            "error_files": error_files
+        }, f, indent=4)
 
     # Gibt Error-Files aus welche nicht gelesen werden konnten
     if error_files:
