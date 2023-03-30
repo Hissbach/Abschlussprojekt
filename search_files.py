@@ -20,7 +20,7 @@ def search_keywords_in_folder(folder_path: str, default_keywords: List[str], val
     all_keywords = default_keywords + value_list
 
     results = {}
-    error_files = []
+    error_files = {}
 
     # Loopt durch alle Datein im Zielordner
     for file_name in os.listdir(folder_path):
@@ -33,7 +33,12 @@ def search_keywords_in_folder(folder_path: str, default_keywords: List[str], val
                     contents = f.read().lower()
                     file_keywords = [keyword.lower() for keyword in all_keywords if re.search(r'\b{}\b'.format(keyword.lower()), contents)]
             except UnicodeDecodeError:
-                error_files.append(file_name)
+                error_files[file_name] = 'decode_error'
+                continue
+
+            # Checkt, ob die Datei alle default Schlüsselwörter enthält
+            if not set(default_keywords).issubset(file_keywords):
+                error_files[file_name] = 'missing_keywords'
                 continue
 
             # Übergibt Ergebnis ins Dictionary
@@ -42,15 +47,19 @@ def search_keywords_in_folder(folder_path: str, default_keywords: List[str], val
 
     # Exportiert Ergebnis in einer JSON-Datei
     with open('results.json', 'w') as f:
-        json.dump({
-            "results": results,
-            "error_files": error_files
-        }, f, indent=4)
+        json.dump(results, f, indent=4)
 
-    # Gibt Error-Files aus welche nicht gelesen werden konnten
+    # Exportiert Fehler-Dateien in einer separaten JSON-Datei
+    with open('error_files.json', 'w') as f:
+        json.dump(error_files, f, indent=4)
+
+    # Gibt Error-Files aus welche nicht gelesen werden konnten oder fehlende Schlüsselwörter haben
     if error_files:
-        print("The following files could not be decoded:")
-        for error_file in error_files:
-            print(f"- {error_file}")
+        print("The following files have errors:")
+        for error_file, error_type in error_files.items():
+            if error_type == 'decode_error':
+                print(f"- {error_file}: Decode error")
+            elif error_type == 'missing_keywords':
+                print(f"- {error_file}: Missing keywords")
 
     return results
