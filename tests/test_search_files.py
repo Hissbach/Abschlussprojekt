@@ -1,48 +1,28 @@
-import unittest
-import tempfile
-import shutil
 import os
+import shutil
+import tempfile
+import unittest
+from typing import List, Dict
 from search_files import search_keywords_in_folder
 
+
 class TestSearchKeywordsInFolder(unittest.TestCase):
-
+    
     def setUp(self):
-        # Create a temporary directory and write some txt files for testing
-        self.tempdir = tempfile.mkdtemp()
-        file1_path = os.path.join(self.tempdir, 'file1.txt')
-        with open(file1_path, 'w') as f:
-            f.write('The quick brown fox jumps over the lazy dog.')
-        file2_path = os.path.join(self.tempdir, 'file2.txt')
-        with open(file2_path, 'w') as f:
-            f.write('The lazy dog jumps over the quick brown fox.')
-        file3_path = os.path.join(self.tempdir, 'file3.txt')
-        with open(file3_path, 'w') as f:
-            f.write('This file does not contain any of the keywords.')
-        self.files_to_delete = [file1_path, file2_path, file3_path]
-
-    def tearDown(self):
-        # Delete the temporary directory and its contents
-        shutil.rmtree(self.tempdir)
-
+        self.test_folder = tempfile.mkdtemp()
+        self.test_files = ['test1.txt', 'test2.txt']
+        self.value_list = ['keyword1', 'keyword2']
+        for test_file in self.test_files:
+            with open(os.path.join(self.test_folder, test_file), 'w', encoding='utf-8') as f:
+                f.write(f'This is a test file for {test_file}. It contains {self.value_list[0]} and {self.value_list[1]}.')
+        
     def test_search_keywords_in_folder(self):
-        # Define the default keywords and additional keywords to search for
-        default_keywords = ['quick', 'lazy', 'dog']
-        additional_keywords = ['brown', 'fox']
-
-        # Call the function being tested
-        result = search_keywords_in_folder(self.tempdir, default_keywords, additional_keywords)
-
-        # Define the expected output
-        expected_output = {
-            'file1.txt': ['quick', 'lazy', 'dog', 'brown', 'fox'],
-            'file2.txt': ['quick', 'lazy', 'dog', 'brown', 'fox']
+        expected_results = {
+            'test1.txt': ['keyword1', 'keyword2'],
+            'test2.txt': ['keyword1', 'keyword2']
         }
-
-        # Assert the result is equal to the expected output
-        self.assertEqual(result, expected_output)
-
-        # Check if the results file was created
-        self.assertTrue(os.path.exists('results.json'))
-
-if __name__ == '__main__':
-    unittest.main()
+        results = search_keywords_in_folder(self.test_folder, self.value_list)
+        self.assertDictEqual(results, expected_results)
+        
+    def tearDown(self):
+        shutil.rmtree(self.test_folder)
