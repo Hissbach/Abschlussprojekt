@@ -28,7 +28,10 @@ def read_excel_to_list(file_path: str, sheet_name: str) -> list:
     except Exception as e:
         print(f"An error occurred while reading the file '{file_path}': {str(e)}")
         return []
-
+    
+    
+    # Convert all values in the DataFrame to strings
+    excel_data = excel_data.astype(str)
     # Convert the DataFrame to a list of strings
     value_list = [val for val in excel_data.values.flatten() if str(val) != 'nan']
 
