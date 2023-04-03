@@ -5,7 +5,7 @@ import search_files as search_files
 FILE_PATH = '/Users/olehissbach/Desktop/Abschlussprojekt/Data/Mappe1.xlsx'
 SHEET_NAME = 'Datatabelle'
 FOLDER_PATH = '/Users/olehissbach/Desktop/Abschlussprojekt/'
-DEFAULT_KEYWORDS = ['martin', 'ole']
+DEFAULT_KEYWORDS = ['Christian']
 
 if not validate_file_path(FILE_PATH) or not validate_folder_path(FOLDER_PATH):
     exit()
