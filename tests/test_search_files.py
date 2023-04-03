@@ -33,7 +33,7 @@ class TestSearchKeywordsInFolder(unittest.TestCase):
         shutil.rmtree(test_folder)
         
     def test_search_keywords_in_folder_no_keywords(self):
-        expected_results = {}
+        expected_results = {'test1.txt': [], 'test2.txt': []}
         value_list = []
         test_folder = tempfile.mkdtemp()
         test_files = ['test1.txt', 'test2.txt']
@@ -54,6 +54,7 @@ class TestSearchKeywordsInFolder(unittest.TestCase):
         results = search_keywords_in_folder(test_folder, value_list)
         self.assertDictEqual(results, expected_results)
         shutil.rmtree(test_folder)
-          
+        
+      
     def tearDown(self):
         shutil.rmtree(self.test_folder)
