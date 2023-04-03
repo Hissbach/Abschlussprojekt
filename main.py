@@ -9,5 +9,5 @@ FOLDER_PATH = '/Users/olehissbach/Desktop/Testdokumente/'
 if not validate_file_path(FILE_PATH) or not validate_folder_path(FOLDER_PATH):
     exit()
 
-values = excel_import.read_excel_to_list(FILE_PATH, SHEET_NAME)
+values = excel_import.read_excel_to_dict(FILE_PATH, SHEET_NAME)
 results = search_files.search_keywords_in_folder(FOLDER_PATH, values)
