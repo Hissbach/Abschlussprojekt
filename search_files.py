@@ -4,20 +4,19 @@ import re
 from typing import List, Dict
 
 
-def search_keywords_in_folder(folder_path: str, default_keywords: List[str], value_list: List[str]) -> Dict[str, List[str]]:
+def search_keywords_in_folder(folder_path: str, value_list: List[str]) -> Dict[str, List[str]]:
     """
     Sucht durch alle .txt Datein in einem Ordner nach Schlüsselworten mit regex
 
     Parameters:
         - folder_path (str): Pfad zum Ordner mit den txt Datein
-        - default_keywords (list): Liste an Standard Schlüsselworten die bei jedem Programmdurchlauf abgefragt werden sollen
         - value_list (list): Liste an Schlüsselworten die zusätzlich noch abgefragt werden sollen (aus der Excel Liste)
 
     Returns:
         - dict: Ein Dictionary wo die Dateinamen Keys sind mit einer Liste aus gefunden schlüsselworten als Value für jede Datei
     """
     # Kombiniert default_ und excel_Keywords
-    all_keywords = default_keywords + value_list
+    all_keywords =  value_list
 
     results = {}
     error_files = {}
@@ -44,11 +43,6 @@ def search_keywords_in_folder(folder_path: str, default_keywords: List[str], val
                     file_keywords = [keyword.lower() for keyword in all_keywords if re.search(r'\b{}\b'.format(keyword.lower()), contents)]
             except UnicodeDecodeError:
                 error_files[file_name] = 'decode_error'
-                continue
-
-            # Checkt, ob die Datei alle default Schlüsselwörter enthält
-            if not set(default_keywords).issubset(file_keywords):
-                error_files[file_name] = 'missing_keywords'
                 continue
 
             # Übergibt Ergebnis ins Dictionary
