@@ -1,16 +1,16 @@
 import pandas as pd
 
 
-def read_excel_to_list(file_path: str, sheet_name: str) -> list:
+def read_excel_to_dict(file_path: str, sheet_name: str) -> dict:
     """
-    Liest Werte aus einer Excel-Datei und gibt sie als Liste an Strings aus
+    Liest Werte aus einer Excel-Datei und gibt sie als Dictionary aus
 
     Parameters:
         - file_path (str): Pfad zur Excel-Datei
         - sheet_name (str): Name der Tabelle (muss vllt noch rausgenommen werden könnte Probleme bereiten)
 
     Returns:
-        - list: Eine Liste an Strings, mit den Werten aus der Excel Datei
+        - dict: Ein Dictionary, mit den Werten aus der Excel Datei, wobei die Spaltennamen als Schlüssel verwendet werden.
     """
     try:
         # Load the Excel sheet into a pandas DataFrame
@@ -18,21 +18,20 @@ def read_excel_to_list(file_path: str, sheet_name: str) -> list:
         # Check if the sheet is empty
         if excel_data.empty:
             print(f"The sheet '{sheet_name}' in '{file_path}' is empty.")
-            return []
+            return {}
     except FileNotFoundError:
         print(f"The file '{file_path}' was not found.")
-        return []
+        return {}
     except PermissionError:
         print(f"You don't have permission to open the file '{file_path}'.")
-        return []
+        return {}
     except Exception as e:
         print(f"An error occurred while reading the file '{file_path}': {str(e)}")
-        return []
-    
+        return {}
 
-    # Convert all values in the DataFrame to strings
-    excel_data = excel_data.astype(str)
-    # Convert the DataFrame to a list of strings
-    value_list = [val for val in excel_data.values.flatten() if str(val) != 'nan']
-    print(value_list)
-    return value_list
+    # Convert the DataFrame to a dictionary using the first row as keys
+    excel_dict = excel_data.to_dict(orient='list')
+    # Remove any NaN values from the dictionary
+    excel_dict = {k: [x for x in v if str(x) != 'nan'] for k, v in excel_dict.items()}
+    print(excel_dict)
+    return excel_dict
