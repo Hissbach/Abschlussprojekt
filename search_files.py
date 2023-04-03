@@ -31,6 +31,16 @@ def search_keywords_in_folder(folder_path: str, default_keywords: List[str], val
             try:
                 with open(file_path, 'r', encoding='utf-8') as f:
                     contents = f.read().lower()
+
+                    # Sucht nach "Preis in Euro" mit einer optionalen Dezimalstelle
+                    match = re.search(r'preis in euro: (\d+(?:\.\d+)?)', contents)
+                    if match:
+                        price = float(match.group(1))
+                        results[file_name] = ['Preis in Euro: {}'.format(price)]
+                    else:
+                        results[file_name] = []
+
+                    # Sucht nach allen anderen Keywords
                     file_keywords = [keyword.lower() for keyword in all_keywords if re.search(r'\b{}\b'.format(keyword.lower()), contents)]
             except UnicodeDecodeError:
                 error_files[file_name] = 'decode_error'
@@ -43,7 +53,7 @@ def search_keywords_in_folder(folder_path: str, default_keywords: List[str], val
 
             # Übergibt Ergebnis ins Dictionary
             if file_keywords:
-                results[file_name] = file_keywords
+                results[file_name] += file_keywords
 
     # Exportiert Ergebnis in einer JSON-Datei
     with open('results.json', 'w') as f:
